@@ -17,6 +17,7 @@ class SyncManager:
         self.api = SnookerOrgAPI(self.admin_email)
 
     def start_sync(self):
+        self.init_logger()
         self.logger.info('Starting sync...')
 
         self.logger.info('Connecting to database...')
@@ -25,7 +26,10 @@ class SyncManager:
         self.logger.info('--- SYNCING UPCOMING MATCHES ---')
         self.sync_upcoming_matches()
         self.logger.info('--- END SYNCING UPCOMING MATCHES ---')
-
+        
+        self.logger.info('--- SYNCING YESTERDAY MATCHES ---')
+        self.sync_yesterdays_matches()
+        self.logger.info('--- END YESTERDAY UPCOMING MATCHES ---')
 
         self.logger.info('Disconnecting database...')
         db.disconnect()
@@ -61,14 +65,21 @@ class SyncManager:
             match_obj.was_in_last_sync = True # Set the flag so we know this match has been updated in the last sync
 
             # We save the returned player IDs, so we can update their information later
-            player_ids.append(match_obj.player1)
-            player_ids.append(match_obj.player2)
+            if match_obj.player1_id not in player_ids: player_ids.append(match_obj.player1_id)
+            if match_obj.player2_id not in player_ids: player_ids.append(match_obj.player2_id)
 
             # We save the returned event IDs, so we can update their information later
-            event_ids.append(match_obj.event_id)
+            if match_obj.event_id not in event_ids: event_ids.append(match_obj.event_id)
 
             # Check if we have a match in the database already
-            db_match = db.retrieve_from_table(db.TABLE_MATCHES, where={'api_id' : '={0}'.format(match_obj.api_id)}, parse_to_object=Match)
+            db_match = db.retrieve_from_table(db.TABLE_MATCHES, 
+                where={
+                    'event_id' : '={0}'.format(match_obj.event_id),
+                    'round' : '={0}'.format(match_obj.round),
+                    'number' : '={0}'.format(match_obj.number),
+                },
+                parse_to_object=Match
+            )
             
             # If we found a match in the database, update the row
             # Else, create a new row
@@ -130,7 +141,5 @@ class SyncManager:
             db.update_row_in_table(db.TABLE_MATCHES, match_obj)
         
 if __name__ == '__main__':
-    db.connect()
     manager = SyncManager()
-    manager.sync_yesterdays_matches()
-    db.disconnect()
+    manager.start_sync()

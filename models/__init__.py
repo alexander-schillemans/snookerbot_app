@@ -68,15 +68,15 @@ class Match:
         self.scheduled_date = scheduled_date
         self.was_in_last_sync = was_in_last_sync if was_in_last_sync else False
 
-    def retrieve_players(self):
-        from utils.models import get_object_by_id
-        self.player1 = get_object_by_id(Player, api_id=self.player1_id)
-        self.player2 = get_object_by_id(Player, api_id=self.player2_id)
-        self.winner = get_object_by_id(Player, api_id=self.winner_id)
+    def retrieve_players(self, connect_db=True):
+        from utils.models import get_object
+        if self.player1_id: self.player1 = get_object(Player, connect_db=connect_db, api_id=self.player1_id)
+        if self.player2_id: self.player2 = get_object(Player, connect_db=connect_db, api_id=self.player2_id)
+        if self.winner_id: self.winner = get_object(Player, connect_db=connect_db, api_id=self.winner_id)
     
-    def retrieve_event(self):
-        from utils.models import get_object_by_id
-        self.event = get_object_by_id(Event, api_id=self.event_id)
+    def retrieve_event(self, connect_db=True):
+        from utils.models import get_object
+        if self.event_id: self.event = get_object(Event, connect_db=connect_db, api_id=self.event_id)
 
 class Event:
 

@@ -33,9 +33,10 @@ def connect():
 
 def disconnect():
     """ Disconnects the PostgreSQL database server """
-
+    
     global db_conn
     db_conn.close()
+    db_conn = None
 
 def format_value(value):
     if type(value) == str: 
@@ -50,7 +51,7 @@ def format_value(value):
 
     return str(value)
 
-def retrieve_from_table(table, where=None, parse_to_object=None, fields=None, order=None):
+def retrieve_from_table(table, where=None, parse_to_object=None, fields=None, order=None, limit=None):
     """ 
         Retrieves data from a specific table and parses all the rows to the given object.
         If no object is given, no parsing is done and a list of tuples is returned.
@@ -84,13 +85,19 @@ def retrieve_from_table(table, where=None, parse_to_object=None, fields=None, or
         if len(where_clause) > 0:
             select_query = '{query} WHERE {where}'.format(
                 query=select_query,
-                where=",".join(where_clause)
+                where=" AND ".join(where_clause)
             )
     
     select_query = '{query} ORDER BY {order}'.format(
         query=select_query,
         order=order
     )
+
+    if limit:
+        select_query = '{query} LIMIT {limit}'.format(
+            query=select_query,
+            limit=limit
+        )
 
     try:
         cur = db_conn.cursor()
