@@ -116,3 +116,24 @@ class Event:
         self.amount_of_active_matches = amount_of_active_matches
         self.amount_of_finished_matches = amount_of_finished_matches
         self.defending_champion = defending_champion
+
+class Email:
+
+    def __init__(self,
+        id=None,
+        email=None,
+        unsubscribe_token=None
+    ):
+
+        self.id = id
+        self.email = email
+        self.unsubscribe_token = unsubscribe_token
+
+    def get_unsubscribe_link(self):
+        from decouple import config
+        unsubscribe_link = '{0}/unsubscribe?&email={1}&token={2}'.format(
+            config('WEBSITE_URL'),
+            self.email,
+            self.unsubscribe_token
+        )
+        return unsubscribe_link

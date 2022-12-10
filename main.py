@@ -2,12 +2,11 @@ from snookerbot.api import SnookerOrgAPI
 from decouple import config
 import datetime
 
-from models import Match, Player, Event
+from models import Match, Event, Email
 import database as db
 
 from utils.email import send_template_email
-from utils.api import convert_api_object
-from psycopg2 import DatabaseError
+
 class SnookerBot:
 
     def __init__(self):
@@ -23,7 +22,6 @@ class SnookerBot:
 
     def send_yesterday_results(self):
         template_name = 'yesterday_results.html'
-        subject = 'The results are in!'
 
         today = datetime.datetime.today().date()
         today_str = today.strftime('%Y-%m-%d')
@@ -40,23 +38,37 @@ class SnookerBot:
             match.retrieve_players(connect_db=False)
             match.retrieve_event(connect_db=False)
 
-        upcoming_events = db.retrieve_from_table(db.TABLE_EVENTS, where={ "start_date": "> '{0}'".format(today_str)}, parse_to_object=Event, order='start_date', limit=3)
-        for event in upcoming_events:
-            event.start_date = event.start_date.strftime('%d/%m/%Y')
-            event.end_date = event.end_date.strftime('%d/%m/%Y')
+        # Only send the mail of there are matches to be sent
+        if len(yesterday_matches) > 0 or len(today_matches) > 0:
+            upcoming_events = db.retrieve_from_table(db.TABLE_EVENTS, where={ "start_date": "> '{0}'".format(today_str)}, parse_to_object=Event, order='start_date', limit=3)
+            for event in upcoming_events:
+                event.start_date = event.start_date.strftime('%d/%m/%Y')
+                event.end_date = event.end_date.strftime('%d/%m/%Y')
 
-        context = {}
-        context['title'] = subject
-        context['yesterday_matches'] = yesterday_matches
-        context['today_matches'] = today_matches
-        context['upcoming_events'] = upcoming_events
+            context = {}
 
-        send_template_email(
-            self.admin_email,
-            subject,
-            template_name,
-            context
-        )
+            if(len(yesterday_matches) > 0):
+                subject = 'The results are in!'
+            elif(len(today_matches) > 0):
+                subject = 'Ready for a day of action?'
+            else:
+                subject = 'Your daily Snooker dose'
+            
+            context['title'] = subject
+            context['yesterday_matches'] = yesterday_matches
+            context['today_matches'] = today_matches
+            context['upcoming_events'] = upcoming_events
+
+            emails = db.retrieve_from_table(db.TABLE_EMAILS, parse_to_object=Email)
+            
+            for email in emails:
+                context['unsubscribe_link'] = email.get_unsubscribe_link()
+                send_template_email(
+                    email.email,
+                    subject,
+                    template_name,
+                    context
+                )
 
 if __name__ == '__main__':
     bot = SnookerBot()

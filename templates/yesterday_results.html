@@ -136,6 +136,7 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
   </tbody>
 </table>
 
+{% if yesterday_matches|length > 0 %}
 <table id="u_content_heading_9" style="font-family:'Rubik',sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
   <tbody>
     <tr>
@@ -149,6 +150,7 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
     </tr>
   </tbody>
 </table>
+{% endif %}
 
   <!--[if (!mso)&(!IE)]><!--></div><!--<![endif]-->
   </div>
@@ -158,7 +160,6 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
     </div>
   </div>
 </div>
-
 
 {% for match in yesterday_matches %}
 <div class="u-row-container v-row-padding--vertical" style="padding: 0px;background-color: transparent">
@@ -313,7 +314,7 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
 </div>
 {% endfor %}
 
-
+{% if today_matches|length > 0 %}
 <div id="u_row_5" class="u-row-container v-row-padding--vertical" style="padding: 30px 0px;background-color: transparent">
   <div class="u-row" style="Margin: 0 auto;min-width: 320px;max-width: 600px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: transparent;">
     <div style="border-collapse: collapse;display: table;width: 100%;height: 100%;background-color: transparent;">
@@ -350,6 +351,7 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
         {{ match.player1.first_name }} {{ match.player1.last_name }} <small>vs</small> {{ match.player2.first_name }} {{ match.player2.last_name }}
       </span></p>
     {% endfor %}
+    <br/>
   </div>
 
       </td>
@@ -365,9 +367,11 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
     </div>
   </div>
 </div>
+{% endif %}
 
 
 
+{% if upcoming_events|length > 0 %}
 <div id="u_row_8" class="u-row-container v-row-padding--vertical" style="padding: 30px 0px;background-color: transparent">
   <div class="u-row" style="Margin: 0 auto;min-width: 320px;max-width: 600px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: transparent;">
     <div style="border-collapse: collapse;display: table;width: 100%;height: 100%;background-color: transparent;">
@@ -426,7 +430,7 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
     </div>
   </div>
 </div>
-
+{% endif %}
 
 
 <div class="u-row-container v-row-padding--vertical" style="padding: 0px;background-color: transparent">
@@ -453,7 +457,7 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
     <table align="left" border="0" cellspacing="0" cellpadding="0" width="32" height="32" style="width: 32px !important;height: 32px !important;display: inline-block;border-collapse: collapse;table-layout: fixed;border-spacing: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;vertical-align: top;margin-right: 15px">
       <tbody><tr style="vertical-align: top"><td align="left" valign="middle" style="word-break: break-word;border-collapse: collapse !important;vertical-align: top">
         <a href="https://facebook.com/" title="Facebook" target="_blank">
-          <img src="https://snookerbot.org/images/image-2.png" alt="Facebook" title="Facebook" width="32" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;max-width: 32px !important">
+          <img src="https://snookerbot.org/images/image-1.png" alt="Facebook" title="Facebook" width="32" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;max-width: 32px !important">
         </a>
       </td></tr>
     </tbody></table>
@@ -473,7 +477,7 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
     <table align="left" border="0" cellspacing="0" cellpadding="0" width="32" height="32" style="width: 32px !important;height: 32px !important;display: inline-block;border-collapse: collapse;table-layout: fixed;border-spacing: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;vertical-align: top;margin-right: 15px">
       <tbody><tr style="vertical-align: top"><td align="left" valign="middle" style="word-break: break-word;border-collapse: collapse !important;vertical-align: top">
         <a href="https://linkedin.com/" title="LinkedIn" target="_blank">
-          <img src="https://snookerbot.org/images/image-4.png" alt="LinkedIn" title="LinkedIn" width="32" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;max-width: 32px !important">
+          <img src="https://snookerbot.org/images/image-2.png" alt="LinkedIn" title="LinkedIn" width="32" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;max-width: 32px !important">
         </a>
       </td></tr>
     </tbody></table>
@@ -483,7 +487,7 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
     <table align="left" border="0" cellspacing="0" cellpadding="0" width="32" height="32" style="width: 32px !important;height: 32px !important;display: inline-block;border-collapse: collapse;table-layout: fixed;border-spacing: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;vertical-align: top;margin-right: 0px">
       <tbody><tr style="vertical-align: top"><td align="left" valign="middle" style="word-break: break-word;border-collapse: collapse !important;vertical-align: top">
         <a href="https://instagram.com/" title="Instagram" target="_blank">
-          <img src="https://snookerbot.org/images/image-5.png" alt="Instagram" title="Instagram" width="32" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;max-width: 32px !important">
+          <img src="https://snookerbot.org/images/image-4.png" alt="Instagram" title="Instagram" width="32" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;max-width: 32px !important">
         </a>
       </td></tr>
     </tbody></table>
@@ -505,7 +509,7 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
       <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:10px 10px 40px;font-family:'Rubik',sans-serif;" align="left">
         
   <div class="v-text-align" style="line-height: 140%; text-align: center; word-wrap: break-word;">
-    <p style="font-size: 14px; line-height: 140%;"><span style="font-family: helvetica, sans-serif; font-size: 14px; line-height: 19.6px;">Contact us | Unsubscribe</span></p>
+    <p style="font-size: 14px; line-height: 140%;"><span style="font-family: helvetica, sans-serif; font-size: 14px; line-height: 19.6px;">Contact us | <a href="{{ unsubscribe_link }}">Unsubscribe</a></span></p>
   </div>
 
       </td>

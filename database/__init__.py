@@ -1,13 +1,15 @@
 from decouple import config
 import psycopg2
 import datetime
+import sys
 
 from models import Player, Match, Event
 
 db_conn = None
 TABLE_PLAYERS = 'players'
 TABLE_MATCHES = 'matches'
-TABLE_EVENTS= 'events'
+TABLE_EVENTS = 'events'
+TABLE_EMAILS = 'emails'
 
 def connect():
     """ Connect to the PostgreSQL database server """
@@ -39,6 +41,9 @@ def disconnect():
     db_conn = None
 
 def format_value(value):
+    """ Formats a given value to one that can be passed into an SQL query. """
+    if value is None: return value
+
     if type(value) == str: 
         value = value.replace("'", "''") # Escape the ' character
         value = "'{value}'".format(value=value)
@@ -155,7 +160,7 @@ def insert_into_table(table, object):
                 columns=", ".join(used_column_names),
                 values=", ".join(insert_values)
             )
-            
+
             cur.execute(insert_query)
             returned_id = cur.fetchone()[0]
             object.id = returned_id
@@ -254,8 +259,10 @@ def update_row_in_table(table, object, id=None):
 
     update_fields = []
     for field in changed_fields:
-        value = format_value(getattr(object, field))
-        update_fields.append('{field} = {value}'.format(field=field, value=value))
+        value = getattr(object, field, None)
+        if value is not None:
+            value = format_value(value)
+            update_fields.append('{field} = {value}'.format(field=field, value=value))
 
     if len(update_fields) > 0:
         # Only hit the db if we have to update any fields
